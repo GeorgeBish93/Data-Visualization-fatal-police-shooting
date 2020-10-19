@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Category Percentages</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alasql@0.6"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+
+<style type="text/css">
+
+body,html{
+
+  background-image: url(pics/bg2.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: cover;
+
+}
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        width: 100%;
+    }
+    #donut-charts{
+      text-align:center;
+    }
+
+
+    /* class applies to select element itself, not a wrapper element */
+    .select-css {
+      text-align: center;
+        display: block;
+        font-size: 12px;
+        font-family: sans-serif;
+        font-weight: 700;
+        color: #444;
+        line-height: 1.3;
+        padding: .6em 1.4em .5em .8em;
+        width: 100%;
+        max-width: 100%; /* useful when width is set to anything other than 100% */
+        box-sizing: border-box;
+        margin: 0;
+        border: 1px solid #aaa;
+        box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+        border-radius: .5em;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: #fff;
+        /* note: bg image below uses 2 urls. The first is an svg data uri for the arrow icon, and the second is the gradient.
+            for the icon, if you want to change the color, be sure to use `%23` instead of `#`, since it's a url. You can also swap in a different svg icon or an external image reference
+
+        */
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+          linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+        background-repeat: no-repeat, repeat;
+        /* arrow icon position (1em from the right, 50% vertical) , then gradient position*/
+        background-position: right .7em top 50%, 0 0;
+        /* icon size, then gradient */
+        background-size: .65em auto, 100%;
+    }
+    /* Hide arrow icon in IE browsers */
+    .select-css::-ms-expand {
+        display: none;
+    }
+    /* Hover style */
+    .select-css:hover {
+        border-color: #888;
+    }
+    /* Focus style */
+    .select-css:focus {
+        border-color: #aaa;
+        /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+        box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+        box-shadow: 0 0 0 3px -moz-mac-focusring;
+        color: #222;
+        outline: none;
+    }
+
+    /* Set options to normal weight */
+    .select-css option {
+        font-weight:normal;
+    }
+
+    /* Support for rtl text, explicit support for Arabic and Hebrew */
+    *[dir="rtl"] .select-css, :root:lang(ar) .select-css, :root:lang(iw) .select-css {
+        background-position: left .7em top 50%, 0 0;
+        padding: .6em .8em .5em 1.4em;
+    }
+
+    /* Disabled styles */
+    .select-css:disabled, .select-css[aria-disabled=true] {
+        color: graytext;
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22graytext%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+          linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    }
+
+    .select-css:disabled:hover, .select-css[aria-disabled=true] {
+        border-color: #aaa;
+    }
+
+    #parent {
+      display: flex;
+      height: 100%;
+      padding: 30px
+
+    }
+    #words {
+      padding-left: 15px;
+      padding-right: 15px;
+      font: 20px sans-serif;
+      background: #b2bec3;
+      border: 1px;
+      border-radius: 10px;
+
+    }
+    #donut-charts {
+      flex: 1;
+
+    }
+  input[type=text] {
+    display: block;
+    font-size: 12px;
+    font-family: sans-serif;
+    font-weight: 700;
+    color: #444;
+    line-height: 1.3;
+    padding: .6em 1.4em .5em .8em;
+    width: 100%;
+    max-width: 100%; /* useful when width is set to anything other than 100% */
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+    border-radius: .5em;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    text-align: center;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+    <header>
+        <div class="row">
+          <ul class="main-nav">
+            <li><a href="index.html"> US Police Fatal Shootings </a></li>
+            <li><a href="viewData.html" > Data </a></li>
+            <li><a href="viz1.html" > Geographic Killing Map </a></li>
+            <li><a href="viz2.html"> Time Domain Zoom </a></li>
+            <li><a href="viz3.html"id="main-tab" > Categorial Donut Chart </a></li>
+            <li><a href="viz4.html"> Categorial Bar Chart </a></li>
+            <li><a href="viz5.html"> Yearly Deaths Percentage </a></li>
+
+          </ul>
+        </div>
+    </header>
+
+
+<script>
+
+    var global_start =new Date("01/01/2015");
+    var global_end =new Date("12/31/2020");
+
+
+$(function() {
+$('#daterange').daterangepicker({
+    "startDate": "01/01/2015",
+    "endDate": "12/31/2020",
+    "drops": "up",
+    "autoApply": true,
+    "opens": "up",
+    "maxSpan": {
+        "year": 10
+    }
+  }, function(start, end, label) {
+    global_start = new Date(start);
+    global_end = new Date(end);
+    fillData(global_start,global_end);
+
+
+  });
+});
+
+</script>
+
+
+
+
+<div id="parent">
+    <div class="custom-select" style="width:230px;" id="words">
+      <br>
+      <h4 style="text-align:center"><b>Donut Chart with Filter</b></h4>
+      <br>
+      <p style="font-size:12px;">This interactive donut chart displays the data as pieces, where each piece represents the percentage of deaths per category. </p>
+      <p style="font-size:12px">Features :</p>
+      <p style="font-size:12px"> • Filter in order to see the distribution of each category.</p>
+      <p style="font-size:12px"> • Hover the mouse over the chart to view the percentage of each piece.</p>
+      <p style="font-size:12px"> • Choose dates range from the date picker.</p>
+
+      <br>
+      <select class="select-css" name="dropdown" id="combo">
+        <option value="race">Victims Race</option>
+        <option value="gender">Victims Gender</option>
+        <option value="mental">Victims Mental-Health</option>
+        <option value="arm">Victims Armed</option>
+        <option value="age">Victims Age</option>
+        <option value="flee">Victims Flee</option>
+        <option value="threat">Victims Threat Level</option>
+        <option value="cam">Police Body-Cam Usage</option>
+      </select>
+      <br>
+
+      <input id="daterange" type="text" name="daterange" value="01/01/2015 - 01/31/2020" >
+      <br>
+      <button id="reset" type="button" class="btn btn-primary btn-block"style="height:32px;">reset dates range</button>
+
+      <script>
+
+      $("#reset").click(function(){
+
+        global_start =new Date("01/01/2015");
+        global_end =new Date("12/31/2020");
+
+        $(function() {
+        $('#daterange').daterangepicker({
+            "startDate": "01/01/2015",
+            "endDate": "12/31/2020",
+            "drops": "up",
+            "autoApply": true,
+            "opens": "up",
+            "maxSpan": {
+                "year": 10
+            }
+          }, function(start, end, label) {
+            global_start = new Date(start);
+            global_end = new Date(end);
+            fillData(global_start,global_end);
+
+
+          });
+        });
+
+        fillData(global_start,global_end);
+
+      });
+
+
+      </script>
+
+	<br>
+    </div>
+        <br><br>
+
+    <div id="donut-charts" style="width:1000px; margin:0 auto;"></div>
+</div>
+    <script>
+
+    d3.csv("fatal-police-shootings-data.csv", function(error, page_init){
+
+        start = new Date("01/01/2015");
+        end = new Date("01/12/2020");
+        var donutData = raceData(page_init);
+        var donuts = new DonutCharts();
+        donuts.create(donutData);
+  });
+
+
+
+$('select[name="dropdown"]').change(function(){
+
+  fillData(global_start,global_end);
+
+});
+
+
+function fillData(global_start,global_end){
+
+
+  d3.csv("fatal-police-shootings-data.csv", function(error, inputCsv){
+
+
+    inputCsv = inputCsv.filter(function(d) {
+
+      return new Date(d.date) >= global_start && new Date(d.date) <= global_end ;
+
+    })
+
+
+
+
+    switch($('select[name="dropdown"]').val()) {
+
+          case 'race':
+              clearChart();
+              var donutData = raceData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'gender':
+              clearChart();
+              var donutData = genderData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'mental':
+              clearChart();
+              var donutData = mentalData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'arm':
+              clearChart();
+              var donutData = armedData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'age':
+              clearChart();
+              var donutData = ageCatData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'cam':
+              clearChart();
+              var donutData = policeCamData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'flee':
+              clearChart();
+              var donutData = fleeData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+          case 'threat':
+              clearChart();
+              var donutData = threatData(inputCsv);
+              var donuts = new DonutCharts();
+              donuts.create(donutData);
+              break;
+
+
+
+
+    }
+
+  });
+
+
+
+}
+
+
+
+
+
+
+
+
+    function DonutCharts() {
+
+        var charts = d3.select('#donut-charts');
+
+        var chart_m,
+            chart_r,
+            color = d3.scale.category20();
+
+
+        var getCatNames = function(dataset) {
+            var catNames = new Array();
+
+            for (var i = 0; i < dataset[0].data.length; i++) {
+                catNames.push(dataset[0].data[i].cat);
+            }
+
+            return catNames;
+        }
+
+        var createLegend = function(catNames) {
+            var legends = charts.select('.legend')
+                                .selectAll('g')
+                                .data(catNames)
+                                .enter().append('g')
+                                .attr('transform', function(d, i) {
+                                    return 'translate(' + (i * 150 + 50) + ', 50)';
+
+                            });
+
+            legends.append('circle')
+                .attr('class', 'legend-icon')
+                .attr('r', 6)
+                .style("stroke", "black")
+                .style('fill', function(d, i) {
+                    return color(i);
+                });
+
+            legends.append('text')
+                .attr('dx', '0.75em')
+                .attr('dy', '.3em')
+
+                .attr('align', 'center')
+                .attr('margin', 'auto')
+                .text(function(d) {
+                    return d;
+                });
+        }
+
+        var createCenter = function(pie) {
+
+            var eventObj = {
+                'mouseover': function(d, i) {
+                    d3.select(this)
+                        .transition()
+                        .attr("r", chart_r * 0.65);
+                },
+
+                'mouseout': function(d, i) {
+                    d3.select(this)
+                        .transition()
+                        .duration(500)
+                        .ease('bounce')
+                        .attr("r", chart_r * 0.6);
+                },
+
+                'click': function(d, i) {
+                    var paths = charts.selectAll('.clicked');
+                    pathAnim(paths, 0);
+                    paths.classed('clicked', false);
+                    resetAllCenterText();
+                }
+            }
+
+            var donuts = d3.selectAll('.donut');
+
+            // The circle displaying total data.
+            donuts.append("svg:circle")
+                .attr("r", chart_r * 0.6)
+                .style("fill", "#E7E7E7")
+                .on(eventObj);
+
+            donuts.append('text')
+                    .attr('class', 'center-txt type')
+                    .attr('y', chart_r * -0.16)
+                    .attr('text-anchor', 'middle')
+                    .style('font-weight', 'bold')
+                    .text(function(d, i) {//edit
+                        return d.type;
+                    });
+            donuts.append('text')
+                    .attr('class', 'center-txt value')
+                    .attr('text-anchor', 'middle');
+            donuts.append('text')
+                    .attr('class', 'center-txt percentage')
+                    .attr('y', chart_r * 0.16)
+                    .attr('text-anchor', 'middle')
+                    .style('font-weight', 'bold')
+                    .style('fill', '#636363');
+        }
+
+        var setCenterText = function(thisDonut) {
+            var sum = d3.sum(thisDonut.selectAll('.clicked').data(), function(d) {
+                return d.data.val;
+            });
+
+            thisDonut.select('.value')
+                .text(function(d) {
+                    return (sum)? sum.toFixed(1) + d.unit
+                                : d.total.toFixed(1) + d.unit;
+                });
+            thisDonut.select('.percentage')
+                .text(function(d) {
+                    return (sum)? (sum/d.total*100).toFixed(2) + '%'
+                                : '';
+                });
+        }
+
+        var resetAllCenterText = function() {
+            charts.selectAll('.value')
+                .text(function(d) {
+                    return d.total.toFixed(1) + d.unit;
+                });
+            charts.selectAll('.percentage')
+                .text('');
+        }
+
+        var pathAnim = function(path, dir) {
+            switch(dir) {
+                case 0:
+                    path.transition()
+                        .duration(500)
+                        .ease('bounce')
+                        .attr('d', d3.svg.arc()
+                            .innerRadius(chart_r * 0.7)
+                            .outerRadius(chart_r)
+                        );
+                    break;
+
+                case 1:
+                    path.transition()
+                        .attr('d', d3.svg.arc()
+                            .innerRadius(chart_r * 0.7)
+                            .outerRadius(chart_r * 1.08)
+                        );
+                    break;
+            }
+        }
+
+        var updateDonut = function() {
+
+            var eventObj = {
+
+                'mouseover': function(d, i, j) {
+                    pathAnim(d3.select(this), 1);
+
+                    var thisDonut = charts.select('.type' + j);
+                    thisDonut.select('.value').text(function(donut_d) {
+                        return d.data.val.toFixed(1) + donut_d.unit;
+                    });
+                    thisDonut.select('.percentage').text(function(donut_d) {
+                        return (d.data.val/donut_d.total*100).toFixed(2) + '%';
+                    });
+                },
+
+                'mouseout': function(d, i, j) {
+                    var thisPath = d3.select(this);
+                    if (!thisPath.classed('clicked')) {
+                        pathAnim(thisPath, 0);
+                    }
+                    var thisDonut = charts.select('.type' + j);
+                    setCenterText(thisDonut);
+                },
+
+                'click': function(d, i, j) {
+                    var thisDonut = charts.select('.type' + j);
+
+                    if (0 === thisDonut.selectAll('.clicked')[0].length) {
+                        thisDonut.select('circle').on('click')();
+                    }
+
+                    var thisPath = d3.select(this);
+                    var clicked = thisPath.classed('clicked');
+                    pathAnim(thisPath, ~~(!clicked));
+                    thisPath.classed('clicked', !clicked);
+
+                    setCenterText(thisDonut);
+                }
+            };
+
+            var pie = d3.layout.pie()
+                            .sort(null)
+                            .value(function(d) {
+                                return d.val;
+                            });
+
+            var arc = d3.svg.arc()
+                            .innerRadius(chart_r * 0.7)
+                            .outerRadius(function() {
+                                return (d3.select(this).classed('clicked'))? chart_r * 1.08
+                                                                           : chart_r;
+                            });
+
+            // Start joining data with paths
+            var paths = charts.selectAll('.donut')
+                            .selectAll('path')
+                            .data(function(d, i) {
+                                return pie(d.data);
+                            });
+
+            paths
+                .transition()
+                .duration(1000)
+                .attr('d', arc);
+
+            paths.enter()
+                .append('svg:path')
+                    .attr('d', arc)
+                    .style('fill', function(d, i) {
+                        return color(i);
+                    })
+                    .style('stroke', '#FFFFFF')
+                    .on(eventObj)
+
+            paths.exit().remove();
+
+            resetAllCenterText();
+        }
+
+        this.create = function(dataset) {
+            var $charts = $('#donut-charts');
+            chart_m = $charts.innerWidth() / dataset.length / 2 * 0.100;
+            chart_r = $charts.innerWidth() / dataset.length / 2 * 0.30;
+
+            charts.append('svg')
+                .attr('class', 'legend')
+                .attr('width', '100%')
+                .attr('height', 60)
+                .attr('text-align', 'center')
+
+                .attr('transform', 'translate(0, 0)');
+
+            var donut = charts.selectAll('.donut')
+                            .data(dataset)
+                        .enter().append('svg:svg')
+                            .attr('width', (chart_r + chart_m) * 2)
+                            .attr('height', (chart_r + chart_m) * 2)
+                            .attr('align', 'center')
+                        .append('svg:g')
+                            .attr('class', function(d, i) {
+                                return 'donut type' + i;
+                            })
+                            .attr('transform', 'translate(' + (chart_r+chart_m) + ',' + (chart_r+chart_m) + ')');
+
+            createLegend(getCatNames(dataset));
+            createCenter();
+
+            updateDonut();
+        }
+
+        this.update = function(dataset) {
+            // Assume no new categ of data enter
+            var donut = charts.selectAll(".donut")
+                        .data(dataset);
+
+            updateDonut();
+        }
+    }
+
+
+
+    function raceData(data) {
+
+        var type = ['Race'];
+        var unit = [''];
+        var cat = ['White', 'Black', 'Hispanic', 'Asian', 'Native-American','Other'];
+        var dataset = new Array();
+        var raceDataset = [];
+        var white = 0;
+        var black = 0;
+        var asian = 0;
+        var native_american = 0 ;
+        var hispanic = 0;
+        var other = 0;
+        var total = 0;
+
+     			for (var i=0;i<data.length; i++) {
+
+                    if(data[i].race=="W")white = white + 1;
+                    else
+                    if(data[i].race=="B") black = black + 1;
+                        else
+                            if(data[i].race=="A") asian = asian + 1;
+                            else
+                                if(data[i].race=="N") native_american = native_american + 1;
+                                else
+                                    if(data[i].race=="H") hispanic = hispanic+1;
+                                    else
+                                        if(data[i].race=="O") other = other+1;
+                     total = total+1;
+                }
+
+               raceDataset = [white,black,hispanic,asian,native_american,other,total];
+
+        for (var i = 0; i < type.length; i++) {
+            var data = new Array();
+            var total = raceDataset[cat.length];
+
+            for (var j = 0; j < cat.length; j++) {
+                data.push({
+                    "cat": cat[j],
+                    "val": raceDataset[j]
+                });
+            }
+
+            dataset.push({
+                "type": type[i],
+                "unit": unit[i],
+                "data": data,
+                "total": total
+            });
+        }
+
+        return dataset;
+
+    }
+
+    function genderData(data){
+
+        var type = ['Gender'];
+        var unit = [''];
+        var cat = ['Male', 'Female'];
+        var dataset = new Array();
+        var genderDataset = [];
+        var male = 0;
+        var female = 0;
+        var total = 0;
+
+     			for (var i=0;i<data.length; i++) {
+
+                    if(data[i].gender=="M")male = male + 1;
+                     else
+                       if(data[i].gender=="F") female = female + 1;
+
+                    total = total+1;
+                }
+         genderDataset = [male,female,total];
+
+          for (var i = 0; i < type.length; i++) {
+
+                var data = new Array();
+                var total = genderDataset[cat.length];
+
+                for (var j = 0; j < cat.length; j++) {
+                    data.push({
+                        "cat": cat[j],
+                        "val": genderDataset[j]
+                    });
+                }
+
+                dataset.push({
+                    "type": type[i],
+                    "unit": unit[i],
+                    "data": data,
+                    "total": total
+                });
+        }
+        return dataset;
+    }
+
+
+function fleeData(data){
+
+        var type = ['Flee'];
+        var unit = [''];
+        var cat = ['Flee', 'Did Not Flee'];
+        var dataset = new Array();
+        var fleeDataset = [];
+        var flee = 0;
+        var noflee = 0;
+        var total = 0;
+
+              for (var i=0;i<data.length; i++) {
+
+
+                       	if(data[i].flee=="Not fleeing") noflee = noflee + 1;
+                     else
+			flee = flee + 1;
+
+                    total = total+1;
+                }
+         fleeDataset = [flee ,noflee ,total];
+
+          for (var i = 0; i < type.length; i++) {
+
+                var data = new Array();
+                var total = fleeDataset [cat.length];
+
+                for (var j = 0; j < cat.length; j++) {
+                    data.push({
+                        "cat": cat[j],
+                        "val": fleeDataset [j]
+                    });
+                }
+
+                dataset.push({
+                    "type": type[i],
+                    "unit": unit[i],
+                    "data": data,
+                    "total": total
+                });
+        }
+        return dataset;
+    }
+
+
+    function mentalData(data){
+        var type = ['Mental-illnes'];
+        var unit = [''];
+        var cat = ['Yes', 'No'];
+
+        var dataset = new Array();
+
+        var mentalDataset = [];
+
+                 var tr = 0;
+                 var fl = 0;
+                 var total = 0;
+
+     			for (var i=0;i<data.length; i++) {
+
+                    if(data[i].signs_of_mental_illness=="True")tr = tr + 1;
+                    else
+                    if(data[i].signs_of_mental_illness=="False") fl = fl + 1;
+
+                    total = total+1;
+                }
+               mentalDataset = [tr ,fl ,total];
+
+
+        for (var i = 0; i < type.length; i++) {
+            var data = new Array();
+            var total = mentalDataset[cat.length];
+
+            for (var j = 0; j < cat.length; j++) {
+                data.push({
+                    "cat": cat[j],
+                    "val": mentalDataset[j]
+                });
+            }
+
+            dataset.push({
+                "type": type[i],
+                "unit": unit[i],
+                "data": data,
+                "total": total
+            });
+        }
+        return dataset;
+
+    }
+
+function policeCamData(data){
+        var type = ['Police Body-Cam'];
+        var unit = [''];
+        var cat = ['On', 'Off'];
+
+        var dataset = new Array();
+
+        var camDataset = [];
+
+                 var tr = 0;
+                 var fl = 0;
+                 var total = 0;
+
+     			for (var i=0;i<data.length; i++) {
+
+                    if(data[i].body_camera=="True")tr = tr + 1;
+                    else
+                    if(data[i].body_camera=="False") fl = fl + 1;
+
+                    total = total+1;
+                }
+               camDataset = [tr ,fl ,total];
+
+
+        for (var i = 0; i < type.length; i++) {
+            var data = new Array();
+            var total = camDataset [cat.length];
+
+            for (var j = 0; j < cat.length; j++) {
+                data.push({
+                    "cat": cat[j],
+                    "val": camDataset [j]
+                });
+            }
+
+            dataset.push({
+                "type": type[i],
+                "unit": unit[i],
+                "data": data,
+                "total": total
+            });
+        }
+        return dataset;
+
+    }
+
+
+    function armedData(data){
+        var type = ['Armed'];
+        var unit = [''];
+        var cat = ['Armed', 'Unarmed','Undetermined'];
+
+        var dataset = new Array();
+
+        var armsDataset = [];
+
+                 var armed = 0;
+                 var unarmed = 0;
+                 var undetermined = 0;
+
+                 var total = 0;
+
+     			for (var i=0;i<data.length; i++) {
+
+                    if(data[i].armed=="unarmed")unarmed = unarmed + 1;
+                    else
+                    if(data[i].armed=="undetermined") undetermined = undetermined + 1;
+                    else
+                        armed = armed +1 ;
+
+                    total = total+1;
+                }
+               //armed = total - unarmed;
+               armsDataset = [armed ,unarmed,undetermined ,total];
+
+        for (var i = 0; i < type.length; i++) {
+
+            var data = new Array();
+            var total = armsDataset[cat.length];
+
+            for (var j = 0; j < cat.length; j++) {
+                data.push({
+                    "cat": cat[j],
+                    "val": armsDataset[j]
+                });
+            }
+
+            dataset.push({
+                "type": type[i],
+                "unit": unit[i],
+                "data": data,
+                "total": total
+            });
+        }
+        return dataset;
+
+
+    }
+    function ageCatData(data){
+        var type = ['Age Categories'];
+        var unit = [''];
+        var cat = ['0-20', '20-40', '40-60', '60-80', '80-100'];
+
+        var dataset = new Array();
+
+        var ageCatDataset = [];
+
+        var cat1 = 0;
+        var cat2 = 0;
+        var cat3 = 0;
+        var cat4 = 0;
+        var cat5 = 0;
+        var total = 0;
+
+        for (var i=0;i<data.length; i++) {
+
+            if(data[i].age <= 20) cat1 = cat1 + 1;
+            else
+            if(data[i].age > 20 && data[i].age <=40) cat2 = cat2 + 1;
+                else
+                    if(data[i].age > 40 && data[i].age <=60) cat3 = cat3 + 1;
+                    else
+                        if(data[i].age > 60 && data[i].age <=80) cat4 = cat4 + 1;
+                        else
+                            if(data[i].age > 80 && data[i].age <= d3.max(data, function(d) { return d.age; }))
+                                cat5 = cat5+1;
+
+                        total = total+1;
+
+        }
+
+        ageCatDataset=[cat1,cat2,cat3,cat4,cat5,total];
+
+
+        for (var i = 0; i < type.length; i++) {
+
+            var data = new Array();
+            var total = ageCatDataset[cat.length];
+
+            for (var j = 0; j < cat.length; j++) {
+                data.push({
+                    "cat": cat[j],
+                    "val": ageCatDataset[j]
+                });
+            }
+
+            dataset.push({
+                "type": type[i],
+                "unit": unit[i],
+                "data": data,
+                "total": total
+            });
+        }
+        return dataset;
+    }
+
+function threatData(data) {
+
+        var type = ['Threat Level'];
+        var unit = [''];
+        var cat = ['Attack', 'Other', 'Undetermined'];
+        var dataset = new Array();
+        var threatDataset = [];
+
+
+        var attack = 0;
+        var other = 0;
+        var undetermined = 0;
+        var total = 0;
+
+
+
+            for (var i=0;i<data.length; i++) {
+
+                    if(data[i].threat_level=="attack")attack = attack + 1;
+                    else
+                    if(data[i].threat_level=="other") other = other + 1;
+                        else
+                            if(data[i].threat_level=="undetermined") undetermined = undetermined + 1;
+
+		   total = total +1;
+            }
+
+            threatDataset = [attack,other,undetermined,total];
+
+        for (var i = 0; i < type.length; i++) {
+            var data = new Array();
+            var total = threatDataset[cat.length];
+
+            for (var j = 0; j < cat.length; j++) {
+                data.push({
+                    "cat": cat[j],
+                    "val": threatDataset[j]
+                });
+            }
+
+            dataset.push({
+                "type": type[i],
+                "unit": unit[i],
+                "data": data,
+                "total": total
+            });
+        }
+
+        return dataset;
+
+    }
+
+    function clearChart(){
+        //refresh
+        document.getElementById("donut-charts").innerHTML = "";//reset div
+
+    }
+
+    </script>
+</body>
+<div class="footer">
+  <p>Copyright © Information Systems (Lorans Ashkar & George Bisharat) Data Visualization 2020. All Rights Reserved.</p>
+</div>

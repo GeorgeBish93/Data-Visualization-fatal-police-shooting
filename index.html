@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>Police Fatal Shootings</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="hp.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+
+body,html{
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  background-image: url(pics/bg.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: cover;
+
+}
+
+
+video{
+
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%,-50%);
+min-width: 100%;
+min-height: 100%
+z-index:300000;
+
+}
+
+.center-box{
+
+z-index: 2;
+position: relative;
+
+height: 200px;
+ width: 400px;
+text-align: center;
+ position:absolute;
+ top: 55%;
+ left: 50%;
+ margin-top: -100px;
+ margin-left: -200px;
+ background: rgba(0, 0, 0, 0.5);
+ color: #f1f1f1;
+ border-radius: 1em;
+ -webkit-box-shadow: -4px -1px 172px -25px rgba(0,0,0,1);
+ -moz-box-shadow: -4px -1px 172px -25px rgba(0,0,0,1);
+ box-shadow: -4px -1px 172px -25px rgba(0,0,0,1);
+ border-radius: 31px 31px 31px 31px;
+ -moz-border-radius: 31px 31px 31px 31px;
+ -webkit-border-radius: 31px 31px 31px 31px;
+
+}
+.center-box header{
+  padding: 10px;
+
+}
+.center-box:hover{
+  background: rgba(0, 0, 0, 0.8);
+  color: #f1f1f1;
+  transition: all 0.15s ease-in;
+}
+
+
+
+.row{
+
+z-index: 2;
+position: relative;
+background: rgba(0, 0, 0, 0.5);
+color: #f1f1f1;
+
+}
+.main-nav{
+
+  list-style: none;
+  margin-top: 0px;
+  padding: 10px;
+
+
+}
+.main-nav li{
+
+display: inline-block;
+
+
+}
+
+.main-nav li a{
+
+color: white;
+text-decoration: none;
+padding: 6px 20px;
+
+font-size: 13px;;
+
+
+}
+
+.main-nav li a:hover{
+
+  color: #ffcc66;
+  transition: all 0.20s ease-in;
+
+}
+
+.btn:hover{
+
+background-color: #ffcc66;
+border-color: #ffcc66;
+transition: all 0.25s ease-in;
+
+
+}
+.section{
+
+  padding:20x 0;
+  z-index: 300000;
+  position: relative;
+}
+
+.section-a{
+  padding: 20px;
+  background:#333;
+  color:#fff;
+}
+.section-b{
+  padding: 20px;
+  background:white;
+  color:black;
+}
+.section-c{
+  background:#333;
+  color:#fff;
+
+}
+.section-c p{
+  font-size: 11px;
+  padding-top: 8px;
+  color: white;
+  text-align: center;
+}
+#main-tab{
+
+  color: #ffcc66;
+
+}
+li.right{
+    text-align: right;
+}
+iframe {
+  display: block;
+  width: 900px;
+  height: 505px;
+  margin: 0 auto;
+  border: 0;
+  -webkit-box-shadow: -1px 1px 105px 38px rgba(0,0,0,0.75);
+  -moz-box-shadow: -1px 1px 105px 38px rgba(0,0,0,0.75);
+  box-shadow: -1px 1px 105px 38px rgba(0,0,0,0.75);
+}
+</style>
+  </head>
+
+
+  <body>
+
+
+<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+
+    <div class="modal-content">
+
+
+      <div class="modal-body">
+        <h3 class="modal-title" style="text-align:center">Tips For you</h3>
+        <br>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <header>
+        <div class="row">
+          <ul class="main-nav">
+            <li><a href="index.html" id="main-tab"> US Police Fatal Shootings </a></li>
+            <li><a href="viewData.html" > Data </a></li>
+            <li><a href="viz1.html" > Geographic Killing Map </a></li>
+            <li><a href="viz2.html"> Time Domain Zoom </a></li>
+            <li><a href="viz3.html"> Categorial Donut Chart </a></li>
+            <li><a href="viz4.html"> Categorial Bar Chart </a></li>
+                      <li><a href="viz5.html"> Yearly Deaths Percentage </a></li>
+
+</ul>
+        </div>
+    </header>
+
+<br>
+
+
+
+    <br>
+    <br>
+    <br>
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/WZtK31DIElw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+<br>
+<br>
+
+
+
+
+</header>
+
+
+<section class="section section-a">
+    <div class="container">
+      <h2>About this story</h2>
+      <p>The Washington Post is compiling a database of every fatal shooting in the United States by a police officer in the line of duty since Jan. 1, 2015.
+In 2015, The Post began tracking more than a dozen details about each killing — including the race of the deceased, the circumstances of the shooting, whether the person was armed and whether the victim was experiencing a mental-health crisis — by culling local news reports, law enforcement websites and social media and by monitoring independent databases such as Killed by Police and Fatal Encounters. The Post conducted additional reporting in many cases.
+In 2016, The Post is gathering additional information about each fatal shooting that occurs this year and is filing open-records requests with departments. More than a dozen additional details are being collected about officers in each shooting.
+The Post is documenting only those shootings in which a police officer, in the line of duty, shot and killed a civilian — the circumstances that most closely parallel the 2014 killing of Michael Brown in Ferguson, Mo., which began the protest movement culminating in Black Lives Matter and an increased focus on police accountability nationwide. The Post is not tracking deaths of people in police custody, fatal shootings by off-duty officers or non-shooting deaths.
+The FBI and the Centers for Disease Control and Prevention log fatal shootings by police, but officials acknowledge that their data is incomplete. In 2015, The Post documented more than two times more fatal shootings by police than had been recorded by the FBI. Last year, the FBI announced plans to overhaul how it tracks fatal police encounters.
+The Post’s database is updated regularly as fatal shootings are reported and as facts emerge about individual cases. The Post is seeking assistance in making the database as comprehensive as possible. To provide information about fatal police shootings since Jan. 1, 2015, send us an email at policeshootingsfeedback@washpost.com. The Post is also interested in obtaining photos of the deceased and original videos of fatal encounters with police.</p>
+    </div>
+  </section>
+  <section class="section section-b">
+      <div class="container">
+        <h2>About the data</h2>
+        <p>The threat_level column was used to flag incidents for the story by Amy Brittain in October 2015. As described in the <a href="http://www.washingtonpost.com/sf/investigative/2015/10/24/on-duty-under-fire/">story</a>, the general criteria for the attack label was that there was the most direct and immediate threat to life. That would include incidents where officers or others were shot at, threatened with a gun, attacked with other weapons or physical force, etc. The attack category is meant to flag the highest level of threat. The other and undetermined categories represent all remaining cases. Other includes many incidents where officers or others faced significant threats.
+
+The threat column and the fleeing column are not necessarily related. For example, there is an incident in which the suspect is moving away from officers (fleeing) and at the same time turns to fire at gun at the officer. Also, attacks represent a status immediately before fatal shots by police; while fleeing could begin slightly earlier and involve a chase.
+
+body_camera: News reports have indicated an officer was wearing a body camera and it may have recorded some portion of the incident.</p>
+      </div>
+    </section>
+
+    <section class="section section-a">
+        <div class="container">
+          <h2>Credits:</h2>
+          <p>Research and Reporting: Julie Tate, Jennifer Jenkins, Kimberly Kindy, Wesley Lowery, Keith Alexander and Steven Rich<p>
+          <p>Production and Presentation: Ted Mellnik, John Muyskens, Kennedy Elliot and Laris Karklis<p>
+          <p>Video: Whitney Leaming and Divya Verma<p>
+          <p>Police Fatal Shootings Data : <a href="https://github.com/washingtonpost/data-police-shootings/blob/master/fatal-police-shootings-data.csv">data.csv</a>
+          <p>Story Source: <a href="https://github.com/washingtonpost/data-police-shootings">github resources</a>
+
+      </section>
+
+
+
+
+
+
+  </body>
+
+
+
+
+
+</html>

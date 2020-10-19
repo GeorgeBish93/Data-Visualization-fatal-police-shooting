@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Bar chart</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+
+
+<style>
+
+
+body,html{
+
+  background-image: url(pics/bg2.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
+  background-size: cover;
+
+}
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+
+}
+
+.x.axis path {
+  display: none;
+}
+
+/* class applies to select element itself, not a wrapper element */
+.select-css {
+  text-align: center;
+    display: block;
+    font-size: 12px;
+    font-family: sans-serif;
+    font-weight: 700;
+    color: #444;
+    line-height: 1.3;
+    padding: .6em 1.4em .5em .8em;
+    width: 100%;
+    max-width: 100%; /* useful when width is set to anything other than 100% */
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid #aaa;
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+    border-radius: .5em;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    /* note: bg image below uses 2 urls. The first is an svg data uri for the arrow icon, and the second is the gradient.
+        for the icon, if you want to change the color, be sure to use `%23` instead of `#`, since it's a url. You can also swap in a different svg icon or an external image reference
+
+    */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+      linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    background-repeat: no-repeat, repeat;
+    /* arrow icon position (1em from the right, 50% vertical) , then gradient position*/
+    background-position: right .7em top 50%, 0 0;
+    /* icon size, then gradient */
+    background-size: .65em auto, 100%;
+}
+/* Hide arrow icon in IE browsers */
+.select-css::-ms-expand {
+    display: none;
+}
+/* Hover style */
+.select-css:hover {
+    border-color: #888;
+}
+/* Focus style */
+.select-css:focus {
+    border-color: #aaa;
+    /* It'd be nice to use -webkit-focus-ring-color here but it doesn't work on box-shadow */
+    box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+    box-shadow: 0 0 0 3px -moz-mac-focusring;
+    color: #222;
+    outline: none;
+}
+
+/* Set options to normal weight */
+.select-css option {
+    font-weight:normal;
+}
+
+/* Support for rtl text, explicit support for Arabic and Hebrew */
+*[dir="rtl"] .select-css, :root:lang(ar) .select-css, :root:lang(iw) .select-css {
+    background-position: left .7em top 50%, 0 0;
+    padding: .6em .8em .5em 1.4em;
+}
+
+/* Disabled styles */
+.select-css:disabled, .select-css[aria-disabled=true] {
+    color: graytext;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22graytext%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+      linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+}
+
+.select-css:disabled:hover, .select-css[aria-disabled=true] {
+    border-color: #aaa;
+}
+#parent {
+  display: flex;
+  height: 100%;
+  padding: 30px
+
+}
+#words {
+  padding-left: 15px;
+  padding-right: 15px;
+  font: 20px sans-serif;
+  background: #b2bec3;
+  border: 1px;
+  border-radius: 10px;
+
+}
+#bar-chart {
+  flex: 1;
+  padding-left: 15px;
+  padding-right: 15px;
+
+}
+
+.toolTip {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: black;
+  color: white;
+  pointer-events: none;
+  border: none;
+  border-radius : 8px;
+  padding: 14px;
+  text-align: center;
+  font: 14px Times;
+}
+
+
+</style>
+
+</head>
+<body>
+    <header>
+        <div class="row">
+          <ul class="main-nav">
+            <li><a href="index.html"> US Police Fatal Shootings </a></li>
+            <li><a href="viewData.html" > Data </a></li>
+            <li><a href="viz1.html" > Geographic Killing Map </a></li>
+            <li><a href="viz2.html"> Time Domain Zoom </a></li>
+            <li><a href="viz3.html"> Categorial Donut Chart </a></li>
+            <li><a href="viz4.html" id="main-tab"> Categorial Bar Chart </a></li>
+            <li><a href="viz5.html"> Yearly Deaths Percentage </a></li>
+
+          </ul>
+        </div>
+    </header>
+
+
+  <div id="parent">
+      <div class="custom-select" style="width:230px;" id="words">
+        <br>
+        <h4 style="text-align:center"><b>Bar Chart with Filter</b></h4>
+        <br>
+        <p style="font-size:12px;">This Bar Chart displays the data using two variables each chart, where each variables represents the number of victims per category.<br>
+        <p style="font-size:12px;">The chart functionality:<br>
+        <p style="font-size:12px"> • Filter in order to see the distribution of each category.</p>
+        <p style="font-size:12px"> • Hover the mouse over the bars to view the relevant data in a tooltip.</p>
+
+        <br>
+        <select class="select-css" name="dropdown" id="combo" >
+          <optgroup label="Male/Female">
+              <option value="mentalGender">Victims Mental-Helath</option>
+              <option value="fleeGender">Victims Flee</option>
+              <option value="armsDist">Vicitms Usage of Arms</option>
+          </optgroup>
+          <optgroup label="Armed/Unarmed">
+              <option value="fleeArm">Victims Flee</option>
+              <option value="mentalArm">Victims Mental-Helath</option>
+          </optgroup>
+          <optgroup label="Victims Threat">
+             <option value="threatWeapon">Victims Threat</option>
+          </optgroup>
+        </select>
+
+        <br>
+      </div>
+          <br><br>
+
+      <div id="bar-chart" style="width:1000px; margin:0 auto;height:450px"></div>
+    <div id='container'></div>
+
+  </div>
+
+
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 180},
+    width = 800 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
+
+var x0 = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var x1 = d3.scale.ordinal();
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x0)
+    .tickSize(0)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select('#bar-chart').append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.csv("fatal-police-shootings-data.csv", function(error, inputCSV){
+
+    mentalDist(inputCSV);
+
+       $('select[name="dropdown"]').change(function(){
+         d3.select("svg").remove();
+
+          svg = d3.select('#bar-chart').append("svg")
+             .attr("width", width + margin.left + margin.right)
+             .attr("height", height + margin.top + margin.bottom)
+             .append("g")
+             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        console.log(this.value);
+
+        switch (this.value) {
+
+            case "mentalGender":
+               mentalDist(inputCSV);
+               break;
+
+            case "mentalArm":
+               mentalArmDist(inputCSV);
+               break;
+
+            case "fleeGender":
+               fleeDist(inputCSV);
+               break;
+
+            case "fleeArm":
+               fleeArmDist(inputCSV);
+               break;
+
+            case "threatWeapon":
+              threatWeapon(inputCSV);
+              break;
+
+            case "armsDist":
+              armsDist(inputCSV);
+              break;
+
+
+        }
+
+       });
+
+
+
+});
+
+function BarChart(data){
+      var color = d3.scale.category20();
+
+      var categoriesNames = data.map(function(d) { return d.categorie; });
+      var rateNames = data[0].values.map(function(d) { return d.rate; });
+      var tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
+      x0.domain(categoriesNames);
+      x1.domain(rateNames).rangeRoundBands([0, x0.rangeBand()]);
+      y.domain([0, d3.max(data, function(categorie) { return d3.max(categorie.values, function(d) { return d.value; }); })]);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .style('font-weight','bold')
+          .style('font-size','18px')
+          .call(xAxis);
+
+      svg.append("g")
+          .attr("class", "y axis")
+          .style('opacity','0')
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .style('font-weight','bold')
+          .text("Victims Number");
+
+      svg.select('.y').transition().duration(500).delay(1300).style('opacity','1');
+
+
+      var slice = svg.selectAll(".slice")
+          .data(data)
+          .enter().append("g")
+          .attr("class", "g")
+          .attr("transform",function(d) { return "translate(" + x0(d.categorie) + ",0)"; });
+
+      slice.selectAll("rect")
+          .data(function(d) { return d.values; })
+      .enter().append("rect")
+          .attr("width", x1.rangeBand())
+          .attr("x", function(d) { return x1(d.rate); })
+          .style("fill", function(d) { return color(d.rate) })
+          .attr("y", function(d) { return y(0); })
+          .attr("height", function(d) { return height - y(0); })
+          .on("mouseover", function(d) {
+            tooltip.style("display", "inline-block");
+          })
+          .on("mousemove", function(d) {
+              d3.select(this).style("fill", d3.rgb(color(d.rate)).darker(2));
+           tooltip
+              .style("left", d3.event.pageX - 100 + "px")
+              .style("top", d3.event.pageY - 110 + "px")
+              .style("display", "inline-block")
+              .html("Category:"+" "+ (d.rate) + "<br><br>" + "Victims:" +" " +(d.value)+" of "+(d3.select(this.parentNode).datum().sumCat)+ "<br><br>"+ ((d.value/d3.select(this.parentNode).datum().sumCat)*100).toFixed(2) + '%' + " of "+ d3.select(this.parentNode).datum().categorie) ;
+          })
+          .on("mouseout", function(d) {
+              d3.select(this).style("fill", color(d.rate));
+              tooltip.style("display", "none");
+          });
+
+      slice.selectAll("rect")
+          .transition()
+          .delay(function (d) {return Math.random()*1000;})
+          .duration(1000)
+          .attr("y", function(d) { return y(d.value); })
+          .attr("height", function(d) { return height - y(d.value); });
+
+      //Legend
+      var legend = svg.selectAll(".legend")
+          .data(data[0].values.map(function(d) { return d.rate; }).reverse())
+      .enter().append("g")
+          .attr("class", "legend")
+          .attr("transform", function(d,i) { return "translate(0," + i * 20 + ")"; })
+          .style("opacity","0");
+
+      legend.append("circle")
+            .attr("cx", width - 12)
+            .attr("r", 8)
+            .style("stroke", "black")
+            .style("fill", function(d) { return color(d); });
+
+      legend.append("text")
+          .attr("x", width - 24)
+          .attr("y", 1)
+          .attr("dy", ".35em")
+          .style("text-anchor", "end")
+          .text(function(d) {return d; });
+
+      legend.transition().duration(500).delay(function(d,i){ return 1300 + 100 * i; }).style("opacity","1");
+
+
+}
+
+function threatWeapon(initData){
+
+     var dataset = new Array();
+     var sampleData ={};
+     var cam = ["shot","shot and Tasered"];
+     var rateNames = ['attack', 'other', 'undetermined'];
+     var category = ["Shot","Shot-And-Tasered"];
+
+
+        for(var j=0 ; j<cam.length; j++){
+
+                var attack = 0;
+                var other = 0;
+                var undetermined = 0;
+
+
+            for (var i=0;i<initData.length; i++) {
+
+                if(initData[i].manner_of_death==cam[j]){
+
+                    if(initData[i].threat_level=="attack")attack = attack + 1;
+                    else
+                    if(initData[i].threat_level=="other") other = other + 1;
+                        else
+                            if(initData[i].threat_level=="undetermined") undetermined = undetermined + 1;
+
+                }
+            }
+
+            var cat = [attack,other,undetermined];
+            var data = new Array();
+
+            for (var j1 = 0; j1 <  cat.length; j1++) {
+                data.push({
+                    "rate": rateNames[j1],
+                    "value": cat[j1]
+                });
+            }
+
+            dataset.push({
+                "categorie": category[j],
+                "values": data,
+                "sumCat":calculateSumOfCat(data)
+
+            });
+
+        }
+      console.log(dataset);
+      BarChart(dataset);
+}
+
+
+function fleeDist(initData){
+
+     var dataset = new Array();
+     var sampleData ={};
+     var sex = ["M","F"];
+     var rateNames = ["Flee","Not Fleeing"];
+     var category = ["Male","Female"];
+
+
+        for(var j=0 ; j<sex.length;j++){
+            var flee = 0;
+            var notflee = 0;
+
+
+            for (var i=0;i<initData.length; i++) {
+
+                if(initData[i].gender==sex[j]){
+
+                    if(initData[i].flee == "Not fleeing") notflee = notflee + 1;
+                    else
+                      flee = flee +1 ;
+                    }
+            }
+
+            var cat = [flee,notflee];
+            var data = new Array();
+
+            for (var j1 = 0; j1 <  cat.length; j1++) {
+                data.push({
+                    "rate": rateNames[j1],
+                    "value": cat[j1]
+                });
+            }
+
+            dataset.push({
+                "categorie": category[j],
+                "values": data,
+                "sumCat":calculateSumOfCat(data)
+
+            });
+
+            }
+
+          console.log(dataset);
+          BarChart(dataset);
+}
+
+function armsDist(initData){
+
+     var dataset = new Array();
+     var sampleData ={};
+     var sex = ["M","F"];
+     var rateNames = ["Armed","Unarmed"];
+     var category = ["Male","Female"];
+
+
+        for(var j=0 ; j<sex.length;j++){
+            var armed = 0;
+            var unarmed = 0;
+
+
+            for (var i=0;i<initData.length; i++) {
+
+                if(initData[i].gender==sex[j]){
+
+                    if(initData[i].armed == "unarmed") unarmed = unarmed + 1;
+                    else
+                      armed = armed +1 ;
+                    }
+            }
+
+            var cat = [armed,unarmed];
+            var data = new Array();
+
+            for (var j1 = 0; j1 <  cat.length; j1++) {
+                data.push({
+                    "rate": rateNames[j1],
+                    "value": cat[j1]
+                });
+            }
+
+            dataset.push({
+                "categorie": category[j],
+                "values": data,
+                "sumCat":calculateSumOfCat(data)
+
+            });
+
+            }
+
+          console.log(dataset);
+          BarChart(dataset);
+}
+
+function mentalDist(initData){
+
+     var dataset = new Array();
+     var sampleData ={};
+     var sex = ["M","F"];
+     var rateNames = ["Mentally-Unstable","Stable"];
+     var category = ["Male","Female"];
+
+
+        for(var j=0 ; j<sex.length;j++){
+            var tr = 0;
+            var fl = 0;
+
+
+            for (var i=0;i<initData.length; i++) {
+
+                if(initData[i].gender==sex[j]){
+
+                    if(initData[i].signs_of_mental_illness=="True")tr = tr + 1;
+                    else
+                    if(initData[i].signs_of_mental_illness=="False") fl = fl + 1;
+                    }
+            }
+
+            var cat = [tr,fl];
+            var data = new Array();
+
+            for (var j1 = 0; j1 <  cat.length; j1++) {
+                data.push({
+                    "rate": rateNames[j1],
+                    "value": cat[j1]
+                });
+            }
+
+            dataset.push({
+                "categorie": category[j],
+                "values": data,
+                "sumCat":calculateSumOfCat(data)
+
+            });
+
+            }
+
+          console.log(dataset);
+          BarChart(dataset);
+}
+
+function clearChart(){
+    //refresh
+    document.getElementById("bar-chart").innerHTML = "";//reset div
+
+}
+
+function calculateSumOfCat(d){
+   // console.log(d)
+    var sumCat = 0;
+
+    for(var i=0; i<d.length ; i++){
+      //console.log(d[i].value)
+        sumCat = sumCat + d[i].value;
+    }
+    //console.log(sumCat)
+
+    return sumCat;
+}
+
+function fleeArmDist(initData){
+
+     var dataset = new Array();
+     var sampleData ={};
+     var rateNames = ["Flee","Not Fleeing"];
+     var category = ["Armed","Unarmed"];
+     var unarmed = new Array();
+     var armed = new Array();
+
+        for (var i=0;i<initData.length; i++) {
+
+                if(initData[i].armed=="unarmed"){
+                   unarmed.push(initData[i]);
+                }else{
+                   armed.push(initData[i]);
+                }
+         }
+
+
+        var catArm =  calculateFleeDist(armed);
+        var catUnarm =  calculateFleeDist(unarmed);
+
+        var armData = subFun(catArm,rateNames);
+        var unarmData = subFun(catUnarm,rateNames);
+
+        dataset.push({
+            "categorie": category[0],
+            "values": armData,
+            "sumCat":calculateSumOfCat(armData)
+
+        });
+        dataset.push({
+            "categorie": category[1],
+            "values": unarmData,
+            "sumCat":calculateSumOfCat(unarmData)
+
+        });
+
+          console.log(dataset);
+          BarChart(dataset);
+}
+
+function calculateFleeDist(data){
+    var flee = 0;
+    var notflee = 0;
+
+     for (var i=0;i<data.length; i++) {
+        if(data[i].flee == "Not fleeing")
+          notflee = notflee + 1;
+        else
+          flee = flee +1 ;
+     }
+
+     var cat = [flee,notflee];
+
+     return cat;
+
+}
+
+function mentalArmDist(initData){
+
+     var dataset = new Array();
+     var sampleData ={};
+     var rateNames = ["Mentally-Unstable","Stable"];
+     var category = ["Armed","Unarmed"];
+     var unarmed = new Array();
+     var armed = new Array();
+
+        for (var i=0;i<initData.length; i++) {
+
+                if(initData[i].armed=="unarmed"){
+                   unarmed.push(initData[i]);
+                }else{
+                   armed.push(initData[i]);
+                }
+         }
+
+
+        var catArm =  calculateMentalDist(armed);
+        var catUnarm =  calculateMentalDist(unarmed);
+
+        var armData = subFun(catArm,rateNames);
+        var unarmData = subFun(catUnarm,rateNames);
+
+        dataset.push({
+            "categorie": category[0],
+            "values": armData,
+            "sumCat":calculateSumOfCat(armData)
+
+        });
+        dataset.push({
+            "categorie": category[1],
+            "values": unarmData,
+            "sumCat":calculateSumOfCat(unarmData)
+
+        });
+
+          console.log(dataset);
+          BarChart(dataset);
+}
+
+
+
+function calculateMentalDist(data){
+    var ill = 0;
+    var stable = 0;
+
+     for (var i=0;i<data.length; i++) {
+        if(data[i].signs_of_mental_illness=="True")ill = ill + 1;
+        else
+        if(data[i].signs_of_mental_illness=="False") stable = stable + 1;
+     }
+
+     var cat = [ill,stable];
+
+     return cat;
+
+}
+
+
+function subFun(inputData,rateNames){
+   var data = new Array();
+    for (var j1 = 0; j1 <  inputData.length; j1++) {
+        data.push({
+            "rate": rateNames[j1],
+            "value": inputData[j1]
+        });
+    }
+
+    return data;
+}
+</script>
+
+</body>
+<div class="footer">
+  <p>Copyright © Information Systems (Lorans Ashkar & George Bisharat) Data Visualization 2020. All Rights Reserved.</p>
+</div>
+</html>

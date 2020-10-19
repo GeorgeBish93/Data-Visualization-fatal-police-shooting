@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>view data</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.0/moment.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<style media="screen">
+.center {
+display: block;
+margin-left: auto;
+margin-right: auto;
+width: 50%;
+}
+body {
+ margin:0;
+ padding:0;
+}
+</style>
+ </head>
+
+ <body>
+   <header>
+       <div class="row">
+         <ul class="main-nav">
+           <li><a href="index.html"> US Police Fatal Shootings </a></li>
+           <li><a href="viewData.html" id="main-tab"> Data </a></li>
+           <li><a href="viz1.html" > Geographic Killing Map </a></li>
+           <li><a href="viz2.html" > Time Domain Zoom </a></li>
+           <li><a href="viz3.html"> Categorial Donut Chart </a></li>
+           <li><a href="viz4.html"> Categorial Bar Chart </a></li>
+           <li><a href="viz5.html"> Yearly Deaths Percentage </a></li>
+
+         </ul>
+       </div>
+   </header>
+   <br>
+
+
+    <div id="employee_table">
+    </div>
+    <img id="loadin_image"src="pics/load.gif"class="center" alt="loading data" >
+
+ </body>
+</html>
+
+<script>
+
+
+
+
+
+    $('#loading-image').show();
+
+$(document).ready(function(){
+  $.ajax({
+   url:"fatal-police-shootings-data.csv",
+   dataType:"text",
+   success:function(data)
+   {
+    var employee_data = data.split(/\r?\n|\r/);
+    var table_data = '<table class="table table-bordered table-striped" width="85%">';
+    for(var count = 0; count<employee_data.length; count++)
+    {
+     var cell_data = employee_data[count].split(",");
+     table_data += '<tr>';
+     for(var cell_count=0; cell_count<cell_data.length; cell_count++)
+     {
+      if(count === 0)
+      {
+       table_data += '<th>'+cell_data[cell_count]+'</th>';
+      }
+      else
+      {
+       table_data += '<td>'+cell_data[cell_count]+'</td>';
+      }
+     }
+     table_data += '</tr>';
+    }
+    table_data += '</table>';
+    $('#employee_table').html(table_data);
+  },
+  complete: function(){
+    $('#loading-image').hide();
+  }
+  });
+
+
+});
+</script>

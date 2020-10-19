@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style>
+  .state{
+    fill: none;
+    stroke: #a9a9a9;
+    stroke-width: 1;
+  }
+  .state:hover{
+    fill-opacity:0.6;
+
+  }
+  #tooltip {
+    position: absolute;
+    text-align: left;
+    padding: 40px;
+    margin: 10px;
+    font: 20px sans-serif;
+    background: lightsteelblue;
+    border: 1px;
+    border-radius: 10px;
+    pointer-events: none;
+  }
+  #tooltip h4{
+    margin:0;
+    font-size:32px sans-serif;
+    padding-top:10px;
+    text-align: center;
+
+
+  }
+  #tooltip{
+    background:rgba(0,0,0,0.9);
+    border:1px solid grey;
+    border-radius:10px;
+    font-size:14px;
+    width:auto;
+    padding:6px;
+    color:white;
+    opacity:0.5;
+
+  }
+  #tooltip table{
+    table-layout:fixed;
+    padding:40px;
+  }
+  #tooltip tr,td{
+    padding:7px;
+
+  }
+
+  #tooltip tr td:nth-child(1){
+    width:60px;
+  }
+  #tooltip tr td:nth-child(2){
+    text-align:center;
+
+  }
+
+  #map{
+   display: flex;
+   justify-content: center;
+   margin-top: 10px;
+  }
+  body,html{
+
+    background-image: url(pics/bg2.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+    background-size: cover;
+
+  }
+</style>
+</style>
+
+
+  </head>
+
+  <body>
+
+    <header>
+        <div class="row">
+          <ul class="main-nav">
+            <li><a href="index.html"> US Police Fatal Shootings </a></li>
+            <li><a href="viewData.html" > Data </a></li>
+            <li><a href="viz1.html" id="main-tab"> Geographic Killing Map </a></li>
+            <li><a href="viz2.html"> Time Domain Zoom </a></li>
+            <li><a href="viz3.html"> Categorial Donut Chart </a></li>
+            <li><a href="viz4.html"> Categorial Bar Chart </a></li>
+            <li><a href="viz5.html"> Yearly Deaths Percentage </a></li>
+
+          </ul>
+        </div>
+    </header>
+
+
+    <div id="tooltip"></div><!-- div to hold tooltip. -->
+    <div id="map">
+      <svg width="960" height="600" id="statesvg"></svg> <!-- svg to hold the map. -->
+    </div><!-- div to hold tooltip. -->
+
+    <script src="uStates.js"></script> <!-- creates uStates. -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+
+    	function tooltipHtml(n, d){	/* function to create html content string in tooltip div. */
+
+        var total_male ;
+        var total_female;
+        if(d.white==0){
+          total_male="-";
+          total_female="-"
+        }else{
+          total_male = Number((d.totalM/d.total*100).toFixed(1))+"%";
+          total_female = Number(((d.total-d.totalM)/d.total*100).toFixed(1))+"%";
+        }
+
+      var white_male ;
+      var white_female;
+      if(d.white==0){
+        white_male="-";
+        white_female="-"
+      }else{
+        white_male = Number((d.whiteM/d.white*100).toFixed(1))+"%";
+        white_female = Number(((d.white-d.whiteM)/d.white*100).toFixed(1))+"%";
+      }
+
+      var black_male ;
+      var black_female;
+      if(d.black==0){
+        black_male="-";
+        black_female="-"
+      }else{
+        black_male = Number((d.blackM/d.black*100).toFixed(1))+"%";
+        black_female = Number(((d.black-d.blackM)/d.black*100).toFixed(1))+"%";
+      }
+
+      var hispanic_male ;
+      var hispanic_female;
+      if(d.hispanic==0){
+        hispanic_male="-";
+        hispanic_female="-"
+      }else{
+        hispanic_male = Number((d.hispanicM/d.hispanic*100).toFixed(1))+"%";
+        hispanic_female = Number(((d.hispanic-d.hispanicM)/d.hispanic*100).toFixed(1))+"%";
+      }
+
+      var asian_male ;
+      var asian_female;
+      if(d.asian==0){
+        asian_male="-";
+        asian_female="-"
+      }else{
+        asian_male = Number((d.asianM/d.asian*100).toFixed(1))+"%";
+        asian_female = Number(((d.asian-d.asianM)/d.asian*100).toFixed(1))+"%";
+      }
+
+      var native_male ;
+      var native_female;
+      if(d.native_american==0){
+        native_male="-";
+        native_female="-"
+      }else{
+        native_male = Number((d.native_americanM/d.native_american*100).toFixed(1))+"%";
+        native_female = Number(((d.native_american-d.native_americanM)/d.native_american*100).toFixed(1))+"%";
+      }
+      var other_male ;
+      var other_female;
+      if(d.other==0){
+        other_male="-";
+        other_female="-"
+      }else{
+        other_male = Number((d.otherM/d.other*100).toFixed(1))+"%";
+        other_female = Number(((d.other-d.otherM)/d.other*100).toFixed(1))+"%";
+      }
+
+
+    		return "<h4><b>"+n+"</b></h4><br><table>"+
+          "<tr style='border-bottom:1px solid black'><td><b>Race</b></td><td><b>Deaths<b></td><td>"+"<b>Male</b>"+"</td><td>"+"<b>Female</b>"+"</td><td>"+"<b>Age Avg</b>"+"</td></tr>"+
+    		  "<tr><td>All</td><td>"+(d.total)+"</td><td>"+total_male+"</td><td>"+total_female+"</td><td>"+d.totalAvg+"</td></tr>"+
+
+    			"<tr><td>White</td><td>"+(d.white)+"</td><td>"+white_male+"</td><td>"+white_female+"</td><td>"+d.whiteAvg+"</td></tr>"+
+    			"<tr><td>Black</td><td>"+(d.black)+"</td><td>"+black_male+"</td><td>"+black_female+"</td><td>"+d.blackAvg+"</td></tr>"+
+    			"<tr><td>Hispanic</td><td>"+(d.hispanic)+"</td><td>"+hispanic_male+"</td><td>"+hispanic_female+"</td><td>"+d.hispanicAvg+"</td></tr>"+
+    			"<tr><td>Asian</td><td>"+(d.asian)+"</td><td>"+asian_male+"</td><td>"+asian_female+"</td><td>"+d.asianAvg+"</td></tr>"+
+    			"<tr><td>Native</td><td>"+(d.native_american)+"</td><td>"+native_male+"</td><td>"+native_female+"</td><td>"+d.nativeAvg+"</td></tr>"+
+    			"<tr><td>Other</td><td>"+(d.other)+"</td><td>"+other_male+"</td><td>"+other_female+"</td><td>"+d.otherAvg+"</td></tr>"+
+    			"</table>";
+
+    	}
+
+     //read the data
+     d3.csv("fatal-police-shootings-data.csv", function(error, data){
+     	// filter year
+     	var data = data.filter(function(d){
+     		return d.age !='0';
+     	});
+
+      var sampleData ={};	/* Sample random data. */
+
+     	["HI", "AK", "FL", "SC", "GA", "AL", "NC", "TN", "RI", "CT", "MA",
+     	"ME", "NH", "VT", "NY", "NJ", "PA", "DE", "MD", "WV", "KY", "OH",
+     	"MI", "WY", "MT", "ID", "WA", "DC", "TX", "CA", "AZ", "NV", "UT",
+     	"CO", "NM", "OR", "ND", "SD", "NE", "IA", "MS", "IN", "IL", "MN",
+     	"WI", "MO", "AR", "OK", "KS", "LS", "VA"]
+
+     		.forEach(function(state){
+
+    		 var white = 0;
+    		 var black = 0;
+    	   var asian = 0;
+    		 var native_american = 0 ;
+      	 var hispanic = 0;
+    	   var other = 0;
+    		 var total = 0;
+
+       // male count
+         var whiteM = 0;
+         var blackM = 0;
+         var hispanicM= 0;
+         var asianM = 0;
+         var native_americanM = 0;
+         var otherM = 0;
+         var totalM=0;
+
+         var whiteAge = 0;
+         var blackAge = 0;
+         var asianAge = 0;
+         var native_americanAge = 0 ;
+         var hispanicAge = 0;
+         var otherAge = 0;
+         var totalAge = 0;
+
+
+     			for (var i=0;i<data.length; i++) {
+    						if(data[i].state==state){
+    								if(data[i].race=="W"){
+                      if(data[i].gender=="M"){
+                        whiteM = whiteM+1;
+                        totalM =totalM +1;
+                      }
+                      white = white + 1;
+                      if(data[i].age) whiteAge=whiteAge+ parseInt(data[i].age);
+                    }
+    								else
+    							  	if(data[i].race=="B"){
+                        if(data[i].gender=="M"){
+                          blackM = blackM+1;
+                          totalM =totalM +1;
+
+                        }
+                        black = black + 1;
+                        if(data[i].age) blackAge=blackAge+parseInt(data[i].age);
+
+                      }
+    									else
+    										if(data[i].race=="A"){
+                          if(data[i].gender=="M"){
+                            asianM = asianM+1;
+                            totalM =totalM +1;
+
+                          }
+                           asian = asian + 1;
+                           if(data[i].age) asianAge=asianAge+parseInt(data[i].age);
+
+                         }
+    										else
+    											if(data[i].race=="N"){
+                            if(data[i].gender=="M"){
+                              native_americanM = native_americanM+1;
+                              totalM =totalM +1;
+
+                            }
+                            native_american = native_american + 1;
+                            if(data[i].age) native_americanAge=native_americanAge+parseInt(data[i].age);
+
+                          }
+    											else
+    												if(data[i].race=="H"){
+                              if(data[i].gender=="M"){
+                                hispanicM = hispanicM+1;
+                                totalM =totalM +1;
+
+                              }
+                              hispanic = hispanic+1;
+                              if(data[i].age) hispanicAge=hispanicAge+parseInt(data[i].age);
+
+                            }
+    												else
+                              if(data[i].race=="O"){
+                                if(data[i].gender=="M"){
+                                  otherM = otherM+1;
+                                  totalM =totalM +1;
+
+                                }
+                                other = other+1;
+                                if(data[i].age) otherAge=otherAge+parseInt(data[i].age);
+
+                              }
+
+    							total = total+1;
+
+
+    					}
+
+     				}
+
+          var whiteAvg='-';
+          if(white!=0)whiteAvg=Number((whiteAge/white).toFixed(1));
+          var blackAvg='-';
+          if(black!=0)blackAvg=Number((blackAge/black).toFixed(1));
+          var asianAvg='-';
+          if(asian!=0)asianAvg=Number((asianAge/asian).toFixed(1));
+          var hispanicAvg='-';
+          if(hispanic!=0)hispanicAvg=Number((hispanicAge/hispanic).toFixed(1));
+          var nativeAvg='-';
+          if(native_american!=0)nativeAvg=Number((native_americanAge/native_american).toFixed(1));
+          var otherAvg='-';
+          if(other!=0)otherAvg=Number((otherAge/other).toFixed(1));
+
+
+
+     			sampleData[state]={white:white,
+    				                 black:black,
+    												 asian:asian,
+    												 hispanic:hispanic,
+    												 native_american:native_american,
+    												 other:other,
+
+                              whiteM:whiteM,
+                              blackM:blackM,
+                              asianM:asianM,
+                              hispanicM:hispanicM,
+                              native_americanM:native_americanM,
+                              otherM:otherM,
+                              totalM:totalM,
+
+                              whiteAvg:whiteAvg,
+                              blackAvg:blackAvg,
+                              asianAvg:asianAvg,
+                              hispanicAvg:hispanicAvg,
+                              nativeAvg:nativeAvg,
+                              otherAvg:otherAvg,
+                              totalAvg:Number(((whiteAge+blackAge+hispanicAge+asianAge+native_americanAge+otherAge)/total).toFixed(1)),
+
+    												 total:total,
+    												 color:d3.interpolate("#ffeda0", "#DC143C")(total/500)};
+
+     		});
+		uStates.draw("#statesvg", sampleData, tooltipHtml);
+    d3.select(self.frameElement).style("height", "1000px");
+
+     });
+
+
+</script>
+
+
+
+
+    <div class="footer">
+      <p>Copyright © Information Systems (Lorans Ashkar & George Bisharat) Data Visualization 2020. All Rights Reserved.</p>
+    </div>
+
+  </body>
+
+</html>
