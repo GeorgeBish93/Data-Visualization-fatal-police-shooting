@@ -6,7 +6,7 @@ In 2015, The Post began tracking more than a dozen details about each killing â€
 we built a various data visualizations and charts using d3.js that helps normal people to understand the data , and maybe allowing scientists to find patterns in the data.
 all of the charts can be filtered to highlight a specific feature .
 
-the project : http://34.91.89.182/~a1/final%20project
+Project link -  https://fatal-police-shootings.web.app/ 
 
 
 
