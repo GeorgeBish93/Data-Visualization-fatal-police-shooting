@@ -1,4 +1,4 @@
-# fatal-police-shootings
+# fatal police shootings
 
 We built a various data visualizations and charts using d3.js ,that helps translating information into a visual context to make data easier for the human brain to understand and pull insights from. And possibly help identify patterns, trends and outliers in large data sets.
 
