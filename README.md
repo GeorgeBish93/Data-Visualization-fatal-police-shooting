@@ -1,6 +1,7 @@
 # Fatal Police Shootings
 <ul>
-<li>Built a various of data visualizations and charts that can be filtered in order to drill-down in the data using - JS, D3.js and R.
+<li>Various visualizations and charts that can be filtered in order to drill-down in the data 
+<li>Implemented using - HTML, JS, D3 and R.
 <li>The representation of data through visual displays of information, communicate complex data relationships and data-driven insights in a way that is easy to understand.
 
 # 
