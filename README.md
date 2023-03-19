@@ -10,5 +10,6 @@ In 2015, The Post began tracking more than a dozen details about each killing â€
 
 
 
+![Category Percentages - fatal-police-shootings web app](https://user-images.githubusercontent.com/45227782/226174026-841aacf8-92f1-480f-b799-c9b1e6d67430.jpg)
 
 
