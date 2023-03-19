@@ -8,7 +8,7 @@ The Washington Post is compiling a database of every fatal shooting in the Unite
 In 2015, The Post began tracking more than a dozen details about each killing — including the race of the deceased, the circumstances of the shooting, whether the person was armed and whether the victim was experiencing a mental-health crisis — by culling local news reports, law enforcement websites and social media and by monitoring independent databases such as Killed by Police and Fatal Encounters. The Post conducted additional reporting in many cases. (source : https://github.com/washingtonpost/data-police-shootings)
 
 
-
+#
 
 ![Category Percentages - fatal-police-shootings web app](https://user-images.githubusercontent.com/45227782/226174026-841aacf8-92f1-480f-b799-c9b1e6d67430.jpg)
 
